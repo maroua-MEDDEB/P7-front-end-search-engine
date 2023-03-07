@@ -1,0 +1,20 @@
+body{
+    margin: auto 100px;
+}
+form{
+    display: flex;
+    align-items: center;
+}
+input{
+    height: 23px;
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 0;
+    background: #e7e7e7;
+}
+svg{
+    height: 20px;
+    width: 20px;
+    margin: -28px;
+}

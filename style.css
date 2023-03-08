@@ -1,7 +1,11 @@
 body{
     margin: auto 100px;
 }
-form{
+input, button{
+    border-radius: 5px;
+    border: 0;
+}
+form, .filter_btns{
     display: flex;
     align-items: center;
 }
@@ -9,12 +13,22 @@ input{
     height: 23px;
     width: 100%;
     padding: 8px;
-    border-radius: 5px;
-    border: 0;
     background: #e7e7e7;
 }
 svg{
     height: 20px;
     width: 20px;
     margin: -28px;
+}
+
+.filter_btns{
+    margin-top: 20px;
+}
+
+.filter_button{
+    width: 130px;
+    height: 50px;
+    color: white;
+    margin-right: 10px;
+    cursor: pointer; 
 }

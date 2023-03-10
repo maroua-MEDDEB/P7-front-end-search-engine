@@ -1,14 +1,42 @@
+/* ajouter un style par défaut à tous les éléments du html*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* font-family: "DM Sans", sans-serif; */
+  }
+
 body{
-    margin: auto 100px;
+    margin: 0;
+}
+
+header{
+    text-align: center;
+    margin-top: 42px;
+}
+
+header img{
+    width: 50.48px;
+    height: 46.29px;
+}
+
+h1{
+    color: #D04F4F;
 }
 input, button{
     border-radius: 5px;
     border: 0;
 }
+
+main{
+    margin: 17px 100px;
+}
+
 form, .filter_btns{
     display: flex;
     align-items: center;
 }
+
 input{
     height: 23px;
     width: 100%;
@@ -25,10 +53,21 @@ svg{
     margin-top: 20px;
 }
 
+.text{
+    color: red;
+}
+
+.btn_group{
+    display: flex;
+}
 .filter_button{
     width: 130px;
     height: 50px;
+    margin-right: 20px;
     color: white;
-    margin-right: 10px;
-    cursor: pointer; 
+    cursor: pointer;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
 }
+

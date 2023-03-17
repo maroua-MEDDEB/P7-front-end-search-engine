@@ -32,21 +32,23 @@ main{
     margin: 17px 100px;
 }
 
-form, .filter_btns{
+.search_bar, .filter_btns{
     display: flex;
     align-items: center;
 }
 
-input{
-    height: 23px;
+.search_bar input{
+    height: 69px;
     width: 100%;
     padding: 8px;
     background: #e7e7e7;
 }
-svg{
-    height: 20px;
-    width: 20px;
-    margin: -28px;
+
+.search_icon{
+    height: 32px;
+    width: 32px;
+    margin: -55px;
+    font-size: 2rem;
 }
 
 .filter_btns{
@@ -60,9 +62,10 @@ svg{
 .btn_group{
     display: flex;
 }
-.filter_button{
-    width: 130px;
-    height: 50px;
+.filter_button {
+    width: 170px;
+    height: 69px;
+    border-radius: 5px;
     margin-right: 20px;
     color: white;
     cursor: pointer;
@@ -71,3 +74,36 @@ svg{
     align-items: center;
 }
 
+.filter_button p, .filter_button i {
+    font-size: 22px;
+}
+
+/*  grille de recettes */
+.recipes_grid {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -1.5rem;
+}
+
+.recipe {
+    width: 33.33%;
+    padding: 1.5rem;
+}
+
+.recipe_image {
+    background: #999999;
+    height: 178px;
+    width: 100%;
+}
+
+.recipe_info {
+    margin: 1rem;
+}
+
+.recipe_name_time {
+    display: flex;
+}
+
+.recipe_name {
+    flex: 1 1 0;
+}

@@ -1,3 +1,5 @@
+// import { recipes } from "../recipes";
+
 // afficher les boutons de filtre
 async function buildButtons(){
     const filter_btns = document.querySelector('.filter_btns'); // sélectionner le bloc qui comporte les boutons
@@ -39,9 +41,6 @@ async function buildButtons(){
 
 
     //créer le bouton de tri d'Appareils
-    // const group_appareils_button = document.createElement('div');
-    // group_appareils_button.classList.add('btn_group');
-    // group_appareils_button.setAttribute('role','group');
 
     const appareils_button = document.createElement('button');
     appareils_button.classList.add('filter_button');
@@ -91,3 +90,7 @@ async function buildButtons(){
 
 }
 buildButtons();
+
+// récupérer les données des recettes
+// console.log(recipes[0]); 
+// construire la grid des recettes

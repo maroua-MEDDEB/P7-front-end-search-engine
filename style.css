@@ -91,19 +91,40 @@ main{
 }
 
 .recipe_image {
-    background: #999999;
+    background: #C7BEBE;
     height: 178px;
     width: 100%;
 }
 
 .recipe_info {
-    margin: 1rem;
-}
-
-.recipe_name_time {
     display: flex;
+    flex-wrap: wrap;
+    padding: 1rem;
+    background: #e7e7e7;
 }
 
 .recipe_name {
-    flex: 1 1 0;
+    width: 50%;
+}
+
+.recipe_time {
+    font-weight: bold;
+    width: 50%;
+    display: flex;
+    justify-content: end;
+}
+
+.recipe_time_icon {
+    margin-right: 7px;
+}
+
+.recipe_ingredients {
+    width: 50%;
+    margin-top: 2rem;
+}
+
+.recipe_description {
+    width: 50%;
+    margin-top: 2rem;
+
 }

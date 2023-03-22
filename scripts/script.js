@@ -1,5 +1,3 @@
-// import { recipes } from "../recipes";
-
 // afficher les boutons de filtre
 async function buildButtons(){
     const filter_btns = document.querySelector('.filter_btns'); // sélectionner le bloc qui comporte les boutons
@@ -8,20 +6,6 @@ async function buildButtons(){
     const group_button = document.createElement('div');
     group_button.classList.add('btn_group');
     group_button.setAttribute('role','group');
-
-    // const text = document.createElement('div');
-    // text.classList.add('text');
-    // text.textContent='bonjour';
-    // text.style.backgroundColor='blue';
-    // ingredients_button.appendChild(text);
-
-    // const ingredients_menu = document.createElement('div');
-    // ingredients_menu.classList.add('ingredients_menu');
-    // ingredients_menu.style.display='none';
-    // ingredients_menu.setAttribute('aria-labelledby','ingredients_menu_group');
-    // const ingredient = document.createElement('a');
-    // ingredient.classList.add('ingredient');
-    // ingredient.setAttribute('href','#');
 
     //créer le bouton de tri d'ingredients
     const ingredients_button = document.createElement('button');
@@ -41,7 +25,6 @@ async function buildButtons(){
 
 
     //créer le bouton de tri d'Appareils
-
     const appareils_button = document.createElement('button');
     appareils_button.classList.add('filter_button');
     appareils_button.setAttribute('type','button');
@@ -56,7 +39,6 @@ async function buildButtons(){
     icon_button_appareils.classList.add('fa-solid');
     icon_button_appareils.classList.add('fa-caret-down');
     appareils_button.appendChild(icon_button_appareils);
-
 
 
     //créer le bouton de tri d'Ustensiles
@@ -90,7 +72,3 @@ async function buildButtons(){
 
 }
 buildButtons();
-
-// récupérer les données des recettes
-// console.log(recipes[0]); 
-// construire la grid des recettes

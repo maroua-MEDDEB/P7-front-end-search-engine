@@ -1,19 +1,10 @@
-//filtre barre de recherche
-const search_input = document.querySelector('.search_input');
-search_input.addEventListener('keyup', (event) => {
-//    console.log(event.target.value); 
-   const recipes_filter = recipes.filter((element) => {
-        return element.name.includes(event.target.value);    
-        return element.ingredients.includes(event.target.value);
-        return element.description.includes(event.target.value);
-
-    });
-    //build_recipes_grid(recipes_filter);
-});
-
+/**
+ * Ce script traite la grille de recettes 
+ */
 // consctruire la grille de recettes
+const recipes_grid = document.querySelector('.recipes_grid');
+
 const build_recipes_grid = (items) => {
-    const recipes_grid = document.querySelector('.recipes_grid');
     
     items.forEach((element, index) => {
         const recipe = document.createElement('div');
@@ -74,3 +65,42 @@ const build_recipes_grid = (items) => {
 };
 
 build_recipes_grid(recipes);
+
+// Barre de recherche
+const search_input = document.querySelector('.search_input');
+// recupérer la valeur de l'input
+search_input.addEventListener('input', (event) => {
+    //évennement à la saisie du clavier 
+    //l'untilisateur saisie au moins de 3 caractères, on retourne l'affichage des recettes
+    if(event.target.value.length < 3) {
+        // Ne fait rien
+    }
+    else {
+        // On reconstruit la grille de recettes contenant les recipes filtrées
+        const filtered_recipes = recipes.filter((item) => {
+            const name_to_search = item.name.toLowerCase(); // le nom à rechercher
+            const ingredients = item.ingredients; // le tableau d'ingrédients à rechercher
+            const description_to_search = item.description.toLowerCase(); // la description à rechercher
+
+            const user_value = event.target.value.toLowerCase(); // la valeur saisie par l'utilisateur 
+            
+            // vérifier si name_to_search contient user_value
+            if(name_to_search.includes(user_value)) {
+                return true;
+            }
+            else if (ingredients.some((el) => { return el.ingredient.toLowerCase().includes(user_value)})) {
+                return true;
+            }
+            // vérifier si description_to_search contient user_value
+            else if(description_to_search.includes(user_value)) {
+                return true;
+            }
+        });
+
+         // regénérer la grille des reccettes après le filtre
+    recipes_grid.innerHTML = '';
+
+    build_recipes_grid(filtered_recipes);
+
+    }    
+});

@@ -6,83 +6,152 @@
     /* font-family: "DM Sans", sans-serif; */
   }
 
-body{
+body {
     margin: 0;
 }
 
-header{
+header {
     text-align: center;
     margin-top: 42px;
 }
 
-header img{
+header img {
     width: 50.48px;
     height: 46.29px;
 }
 
-h1{
+h1 {
     color: #D04F4F;
 }
-input, button{
+
+.search_input, button {
     border-radius: 5px;
     border: 0;
 }
 
-main{
+main {
     margin: 17px 100px;
 }
 
-.search_bar, .filter_btns{
+.search_bar, .filter_btns {
     display: flex;
     align-items: center;
 }
 
-.search_bar input{
+.search_input {
     height: 69px;
     width: 100%;
     padding: 8px;
     background: #e7e7e7;
+    font-size: 1rem;
 }
 
-.search_icon{
+.search_icon {
     height: 32px;
     width: 32px;
     margin: -55px;
     font-size: 2rem;
 }
 
-.filter_btns{
+.filter_btns {
     margin-top: 20px;
 }
 
-.text{
+.text {
     color: red;
 }
 
-.btn_group{
+.btns_group {
     display: flex;
 }
+
+.filter_button_group {
+    margin-right: 20px;
+}
+
 .filter_button {
     width: 170px;
     height: 69px;
     border-radius: 5px;
-    margin-right: 20px;
     color: white;
     cursor: pointer;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    font-size: 1.4rem;
 }
 
-.filter_button p, .filter_button i {
-    font-size: 22px;
+.filter_button i {
+    font-size: 1.25rem;
+    color: white;
 }
+
+.ingredients_button {
+    background: #3282f7;
+}
+
+.filter {
+    display: block;
+    padding: 20px;
+}
+
+.filter_search_group {
+    display: flex;
+}
+
+.filter_search_group input {
+    min-width: 200px;
+    width: 100%;
+    font-size: 1rem;
+    background: none;
+    border: none;
+    color: #ffffff;
+    outline: none;
+}
+
+.filter_search_group input::placeholder {
+    color: #ffffff;
+    opacity: 50%;
+}
+
+.filter_search_group i {
+    font-size: 1.25rem;
+    padding: 0.5rem;
+    color: #ffffff;
+}
+
+.filter_list {
+    display: flex;
+    flex-wrap: wrap;
+    color: #ffffff;
+    margin-top: 10px;
+    width: 667px;
+}
+
+.filter_list_item{
+    width: 33.33%;
+}
+
+.appliances_button {
+    background: #68d9a4;
+}
+
+.ustensiles_button {
+    background: #ed6454;
+}
+
+/* .modal_filter_search {
+
+} */
+
+
 
 /*  grille de recettes */
 .recipes_grid {
     display: flex;
     flex-wrap: wrap;
     margin: -1.5rem;
+    margin-top: 1rem;
 }
 
 .recipe {
@@ -126,5 +195,4 @@ main{
 .recipe_description {
     width: 50%;
     margin-top: 2rem;
-
 }

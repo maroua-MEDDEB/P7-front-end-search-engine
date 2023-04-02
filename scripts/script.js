@@ -4,8 +4,54 @@
 
 // Afficher les boutons de filtre
 const filter_btns = document.querySelector('.filter_btns'); // sélectionner le bloc qui comporte les boutons
+let filtred = [];
 
-const build_filter_list = (backgroundColor) => {
+let ingredients;
+let filtred_ingredients = []; 
+const filter_inreg = () => {
+    recipes.forEach((recipe) => {
+        ingredients = recipe.ingredients;
+
+        ingredients.forEach((ingr) => {
+            if(filtred_ingredients.indexOf(ingr.ingredient.toLowerCase()) === -1) {
+                console.log(filtred_ingredients.push(ingr.ingredient.toLowerCase())
+                );
+                // filtred_ingredients.push(ingr.ingredient.toLowerCase());
+            }
+        });    
+    })
+}
+
+let appliance;
+let filtred_appliance = [];
+const filter_app = () => {
+    recipes.forEach((el) => {
+        appliance = el.appliance;
+        
+        filtred_appliance.push(appliance);
+
+    })
+};
+
+let ustensils;
+let filtred_ustensils = [];
+const filter_ust = () => {
+    recipes.forEach((recipe) => {
+        ustensils = recipe.ustensils;
+
+        ustensils.forEach((ust) => {
+           
+            if(filtred_ustensils.indexOf(ust.toLowerCase()) === -1) {
+                filtred_ustensils.push(ust.toLowerCase());
+                console.log(filtred_ustensils.push(ust.toLowerCase())
+                );
+            }
+            console.log(ust.toLowerCase());
+        });    
+    })
+}
+
+const build_filter_list = (backgroundColor, filtred) => {
     const filter = document.createElement('div');
     filter.classList.add('filter');
     filter.style.backgroundColor = backgroundColor;
@@ -29,25 +75,18 @@ const build_filter_list = (backgroundColor) => {
     filter.appendChild(filter_search_group);
     filter.appendChild(filter_list);
     
-    let ingredients;
-    let filtred_ingredients = []; 
+    filter_inreg();
+    filter_app();
+    filter_ust();
 
-    recipes.forEach((recipe) => {
-        ingredients = recipe.ingredients;
-
-        ingredients.forEach((ingr) => {
-            if(filtred_ingredients.indexOf(ingr.ingredient.toLowerCase()) === -1) {
-                filtred_ingredients.push(ingr.ingredient.toLowerCase());
-            }
-        });    
-    })
-
-    filtred_ingredients.forEach((item) => {
+    filtred.forEach((item) => {
         const filter_list_item = document.createElement('div');
         filter_list_item.classList.add('filter_list_item');
         filter_list_item.textContent = item;
         filter_list.appendChild(filter_list_item);
     });
+
+   
 
     return filter;
 }
@@ -78,6 +117,8 @@ const  buildButtons = () => {
     // Créer un groupe pour le  bouton d'appareils
     const appliances_button_group = document.createElement('div');
     appliances_button_group.classList.add('filter_button_group');
+    appliances_button_group.classList.add('appliances_button_group');
+
 
     // Créer le bouton de tri d'Appareils
     const appliances_button = document.createElement('button');
@@ -94,6 +135,8 @@ const  buildButtons = () => {
     // créer un groupe pour le  bouton d'ustensiles
     const ustensiles_button_group = document.createElement('div');
     ustensiles_button_group.classList.add('filter_button_group');
+    ustensiles_button_group.classList.add('ustensiles_button_group');
+
 
     // Créer le bouton de tri d'Ustensiles
     const ustensiles_button = document.createElement('button');
@@ -108,7 +151,6 @@ const  buildButtons = () => {
     ustensiles_button.appendChild(ustensiles_button_icon);
 
     ingredients_button_group.appendChild(ingredients_button);
-
     btns_group.appendChild(ingredients_button_group);
    
     appliances_button_group.appendChild(appliances_button);
@@ -127,61 +169,31 @@ const  buildButtons = () => {
 buildButtons();
 
 const ingredients_button = document.querySelector('.ingredients_button');
+const appliances_button = document.querySelector('.appliances_button');
+const ustensiles_button = document.querySelector('.ustensiles_button');
+
+
 const ingredients_button_group = document.querySelector('.ingredients_button_group');
+const appliances_button_group = document.querySelector('.appliances_button_group');
+const ustensiles_button_group = document.querySelector('.ustensiles_button_group');
+
+
 
 ingredients_button.addEventListener('click', (event) => {
     ingredients_button.style.display = 'none';
-    ingredients_button_group.appendChild(build_filter_list('#3282f7'));
+    ingredients_button_group.appendChild(build_filter_list('#3282f7', filtred_ingredients));
 });
 
-//filtrer  ingredient
-    // ingredients_filter.style.display = 'block';
+appliances_button.addEventListener('click', () => {
+    appliances_button.style.display = 'none';
+    appliances_button_group.appendChild(build_filter_list('#68d9a4', filtred_appliance));
+});
 
-    //initialiser tableau des ingrédients
- 
-    /*const filtre_ingredients = recipes.filter((item) => {
-        const ingredients = item.ingredients; // le tableau d'ingrédients
-        // console.log(ingredients);
-        
-        for(i=0; i<ingredients.length;i++){
-            const result_ingredients = ingredients[i];
-            // console.log(result_ingredients);
-            
-            const tab_ingredients = Object.values(result_ingredients);
-            console.log(tab_ingredients[0]);
-        }
-    });*/
+ustensiles_button.addEventListener('click', () => {
+    ustensiles_button.style.display = 'none';
+    ustensiles_button_group.appendChild(build_filter_list('#ed6454', filtred_ustensils));
+});
 
 
-// // filtrer appareils
-// const btn_filter_appareils = document.querySelector('.appliances_button');
-// btn_filter_appareils.addEventListener('click', () => {
-//     //initialiser tableau des appareils
-//     const filtre_appareils = recipes.filter((item) => {
-//         const appareil_to_filter = item.appliance.toLowerCase(); // l'appareil 
-//         console.log(appareil_to_filter);
-//     });
-// });
 
-
-// // filtrer ustensiles
-// const btn_filter_ustensiles = document.querySelector('.ustensiles_button');
-// btn_filter_ustensiles.addEventListener('click', () => {
-//     //initialiser tableau des Ustensiles
-//     const filtre_ustensiles = recipes.filter((item) => {
-//         const ustensiles = item.ustensils; // le tableau des ustensiles 
-        
-//         for(i=0; i<ustensiles.length;i++){
-//             // const result_ustensiles = ustensiles[i];
-//             // console.log(result_ustensiles);
-
-//            // si l'élement existe on le supprime
-//             if(ustensiles.indexOf(ustensiles[i]) !== -1){
-//                 // donc not existe alors on fait rien (on laisse l'élément)
-//                 console.log(ustensiles.splice(ustensiles.indexOf(ustensiles[i]), 1));
-
-//             }
-//         }
-//     });
-// });
 

@@ -139,6 +139,13 @@ main {
 
 .filter_list_item{
     width: 33.33%;
+    padding:5px;
+    font-size: 1rem;
+}
+
+.filter_list_item:hover {
+    background: #ffffff;
+    color: #000000;
 }
 
 .appliances_button {
@@ -165,6 +172,7 @@ main {
     border-radius: 5px;
     padding:10px;
     color: #ffffff;
+    margin-right: 10px;
 }
 
 .tag span {

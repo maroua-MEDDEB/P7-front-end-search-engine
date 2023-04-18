@@ -4,37 +4,37 @@
 // consctruire la grille de recettes
 const recipes_grid = document.querySelector('.recipes_grid');
 
+const create = (elem, attributes) => {
+    const element = document.createElement(elem);
+    for(key in attributes) {
+        element.setAttribute(key, attributes[key]);
+    }
+    return element;
+};
+
 const build_recipes_grid = (items) => {
     
     items.forEach((element, index) => {
-        const recipe = document.createElement('div');
-        recipe.classList.add('recipe');
+        /*const recipe = document.createElement('div');
+        recipe.classList.add('recipe');*/
+        const recipe = create('div', {class: 'recipe'});
 
-        const recipe_image = document.createElement('div');
-        recipe_image.classList.add('recipe_image');
+        const recipe_image = create('div', {class : 'recipe_image'});
 
-        const recipe_info = document.createElement('div');
-        recipe_info.classList.add('recipe_info');
+        const recipe_info = create('div', {class: 'recipe_info'});
 
-        const recipe_name = document.createElement('span');
-        recipe_name.classList.add('recipe_name');
+        const recipe_name = create('span', {class: 'recipe_name'});
         recipe_name.textContent = element.name;
 
-        const recipe_time_icon = document.createElement('i');
-        recipe_time_icon.classList.add('fa-regular');
-        recipe_time_icon.classList.add('fa-clock');
-        recipe_time_icon.classList.add('recipe_time_icon');
-       
-
-        const recipe_time = document.createElement('span');
-        recipe_time.classList.add('recipe_time');
+        const recipe_time_icon = create('i', {class: 'fa-regular fa-clock recipe_time_icon'});
+              
+        const recipe_time = create('span', {class : 'recipe_time'});
         recipe_time.textContent = element.time + ' min';
-
-        const recipe_ingredients = document.createElement('div');
-        recipe_ingredients.classList.add('recipe_ingredients');
+        
+        const recipe_ingredients = create('div', {class: 'recipe_ingredients'});
         
         element.ingredients.forEach((el) => {
-            const ingredient = document.createElement('div');
+            const ingredient = create('div');
             const el_ingredient = el.ingredient ? el.ingredient : '';
             const el_quantity = el.quantity ? el.quantity : '';
             const el_unit = el.unit ? el.unit : '';
@@ -44,8 +44,7 @@ const build_recipes_grid = (items) => {
             recipe_ingredients.appendChild(ingredient);
         });
 
-        const recipe_description = document.createElement('div');
-        recipe_description.classList.add('recipe_description');
+        const recipe_description = create('div', {class: 'recipe_description'});
         recipe_description.textContent = element.description;
 
         recipe.appendChild(recipe_image);
@@ -68,21 +67,19 @@ build_recipes_grid(recipes);
 
 // Barre de recherche
 const search_input = document.querySelector('.search_input');
-// recupérer la valeur de l'input
-search_input.addEventListener('input', (event) => {
-    //évennement à la saisie du clavier 
+
+const search_recipe =  (user_value) => { // user_value: c'est la valeur saisie par l'utilisateur
+    let filtered_recipes = recipes;
     //l'untilisateur saisie au moins de 3 caractères, on retourne l'affichage des recettes
-    if(event.target.value.length < 3) {
-        // Ne fait rien
+    if(search_input.value.length < 3) {
+        // Ne rien faire
     }
     else {
         // On reconstruit la grille de recettes contenant les recipes filtrées
-        const filtered_recipes = recipes.filter((item) => {
+        filtered_recipes = recipes.filter((item) => {
             const name_to_search = item.name.toLowerCase(); // le nom à rechercher
             const ingredients = item.ingredients; // le tableau d'ingrédients à rechercher
             const description_to_search = item.description.toLowerCase(); // la description à rechercher
-
-            const user_value = event.target.value.toLowerCase(); // la valeur saisie par l'utilisateur 
             
             // vérifier si name_to_search contient user_value
             if(name_to_search.includes(user_value)) {
@@ -96,11 +93,24 @@ search_input.addEventListener('input', (event) => {
                 return true;
             }
         });
-
-         // regénérer la grille des reccettes après le filtre
+   
+    } 
+    //ajouter les nouveau filtres sélectionnés
+    const selected_appareils = document.querySelectorAll('.tag_text.appliances');
+    const selected_appareils_text = [];
+    selected_appareils.forEach((appareil) => {
+        selected_appareils_text.push(appareil.textContent);
+    });
+    // console.log(selected_appareils_text);
+    
+    // regénérer la grille des reccettes après le filtre
     recipes_grid.innerHTML = '';
 
     build_recipes_grid(filtered_recipes);
+};
 
-    }    
+// recupérer la valeur de l'input
+search_input.addEventListener('input', (event) => {
+    //évennement à la saisie du clavier 
+   search_recipe(search_input.value.toLowerCase());
 });

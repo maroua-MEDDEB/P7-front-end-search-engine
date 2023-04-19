@@ -4,7 +4,7 @@
 
 // Afficher les boutons de filtre
 const filter_btns = document.querySelector('.filter_btns'); // sélectionner le bloc qui comporte les boutons
-// let filtred = [];
+let selected_tags_appliances = [];
 
 let filtred_ingredients = []; 
 const filter_inreg = () => {
@@ -96,15 +96,15 @@ const build_filter_list = (backgroundColor, research_element, filtred) => {
 
         filter_list_item.addEventListener('click', (event) => {
             // Si  tags_container contient un tag dont son data-id égal au text du bouton qu'on a cliqué dessus
-            if(tags_container.querySelector('[data-id="'+event.currentTarget.textContent+'"]') === null) {
-                tags_container.appendChild(build_tag(event.currentTarget.textContent));
-         
-                // regénérer la grille des reccettes après le filtre
-                recipes_grid.innerHTML = '';
+            if(tags_container.querySelector('[data-id="'+item+'"]') === null) {
+                tags_container.appendChild(build_tag(item));
+
+                // ajouter les tags dans un tableau
+                selected_tags_appliances.push(item.toLowerCase());
 
                 // On reconstruit la grille de recettes contenant la recette dont le tag est sélectionné
                 // const target_recipes = recipes.filter((item) => {
-                search_recipe(item.toLowerCase()); // récupérer les recipes filtés avec l'input de recherche
+                search_recipe(selected_tags_appliances); // récupérer les recipes filtés avec l'input de recherche
             }
         });
     });
@@ -112,7 +112,7 @@ const build_filter_list = (backgroundColor, research_element, filtred) => {
     return filter;
 };
 
-const  buildButtons = () => {
+const buildButtons = () => {
     // Créer les boutons de tri
     const btns_group = create('div', {class: 'btns_group', role: 'group'});
 

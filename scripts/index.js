@@ -68,49 +68,53 @@ build_recipes_grid(recipes);
 // Barre de recherche
 const search_input = document.querySelector('.search_input');
 
-const search_recipe =  (user_value) => { // user_value: c'est la valeur saisie par l'utilisateur
+const search_recipe = (user_value) => { // user_value: c'est la valeur saisie par l'utilisateur
     let filtered_recipes = recipes;
-    //l'untilisateur saisie au moins de 3 caractères, on retourne l'affichage des recettes
-    if(search_input.value.length < 3) {
-        // Ne rien faire
+
+    // On reconstruit la grille de recettes contenant les recipes filtrées
+    filtered_recipes = recipes.filter((item) => {
+        const name_to_search = item.name.toLowerCase(); // le nom à rechercher
+        const ingredients = item.ingredients; // le tableau d'ingrédients à rechercher
+        const description_to_search = item.description.toLowerCase(); // la description à rechercher
+        const appliance_to_search = item.appliance.toLowerCase();
+
+        // vérifier si name_to_search contient user_value
+
+        // console.log(name_to_search.includes(user_value));
+
+        if(name_to_search.includes(user_value)) {
+            return true;
+        }
+        else if (ingredients.some((el) => { return el.ingredient.toLowerCase().includes(user_value)})) {
+            return true;
+        }
+        // vérifier si description_to_search contient user_value
+        else if(description_to_search.includes(user_value)) {
+            return true;
+        }
+        else if(appliance_to_search.includes(user_value)) {
+            return true;
+        }
+    });
+
+    if(filtered_recipes.length === 0) {
+        recipes_grid.innerHTML = '<div class="search_error">Aucune recette ne correspond à votre critère... vous pouvez chercher « tarte aux pommes », « poisson », etc.</div>';
     }
     else {
-        // On reconstruit la grille de recettes contenant les recipes filtrées
-        filtered_recipes = recipes.filter((item) => {
-            const name_to_search = item.name.toLowerCase(); // le nom à rechercher
-            const ingredients = item.ingredients; // le tableau d'ingrédients à rechercher
-            const description_to_search = item.description.toLowerCase(); // la description à rechercher
-            
-            // vérifier si name_to_search contient user_value
-            if(name_to_search.includes(user_value)) {
-                return true;
-            }
-            else if (ingredients.some((el) => { return el.ingredient.toLowerCase().includes(user_value)})) {
-                return true;
-            }
-            // vérifier si description_to_search contient user_value
-            else if(description_to_search.includes(user_value)) {
-                return true;
-            }
-        });
-   
-    } 
-    //ajouter les nouveau filtres sélectionnés
-    const selected_appareils = document.querySelectorAll('.tag_text.appliances');
-    const selected_appareils_text = [];
-    selected_appareils.forEach((appareil) => {
-        selected_appareils_text.push(appareil.textContent);
-    });
-    // console.log(selected_appareils_text);
-    
-    // regénérer la grille des reccettes après le filtre
-    recipes_grid.innerHTML = '';
-
-    build_recipes_grid(filtered_recipes);
+          // regénérer la grille des reccettes après le filtre
+        recipes_grid.innerHTML = '';
+        build_recipes_grid(filtered_recipes);
+    }
 };
 
 // recupérer la valeur de l'input
 search_input.addEventListener('input', (event) => {
     //évennement à la saisie du clavier 
-   search_recipe(search_input.value.toLowerCase());
+    if(search_input.value.length > 2) {
+        search_recipe(search_input.value.toLowerCase());
+    } 
+    else {
+        recipes_grid.innerHTML = '';
+        build_recipes_grid(recipes);
+    }
 });

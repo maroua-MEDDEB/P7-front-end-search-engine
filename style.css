@@ -238,3 +238,9 @@ main {
 	-webkit-box-orient: vertical;
 }
 
+.search_error {
+    background: #cccccc;
+    padding: 10px;
+    font-size: 1.5rem;
+    margin: 40px auto;
+}

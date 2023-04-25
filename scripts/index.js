@@ -276,7 +276,7 @@ ingredients_button.addEventListener('click', (event) => {
 
     const filter_list = event.currentTarget.parentNode.querySelector('.filter_list');
     
-    const temp_element = document.createElement('div');
+    const temp_element = create('div', {class: 'temp_ingredients'});
     temp_element.style.width = filter_list.offsetWidth + 40 +'px';
 
     ingredients_button_group.appendChild(temp_element);
@@ -289,7 +289,7 @@ appliances_button.addEventListener('click', (event) => {
 
     const filter_list = event.currentTarget.parentNode.querySelector('.filter_list');
     
-    const temp_element = document.createElement('div');
+    const temp_element = create('div', {class: 'temp_appliances'});
     temp_element.style.width = filter_list.offsetWidth + 40 +'px';
 
     appliances_button_group.appendChild(temp_element);
@@ -334,6 +334,7 @@ const build_filter_list = (list_name, placeholderText, filtered_array) => {
     const filter_search_input = create('input', {type: 'text', placeholder: placeholderText});
 
     const filter_search_icon = create('i', {class: 'fa-solid fa-chevron-up'});
+    filter_search_icon.style.cursor = 'pointer';
 
     const filter_list = create('div', {class: 'filter_list'});
 
@@ -358,6 +359,7 @@ const build_filter_list = (list_name, placeholderText, filtered_array) => {
         tag_icon.addEventListener('click', () => {
             tag.remove();
 
+            // Mise à jour des tableaux de tags
             selected_ingredients_tags = selected_ingredients_tags.filter((el) => {
                 if(list_name === 'ingredients' && el.toLowerCase() !== textContent.toLowerCase()) {
                     return true;
@@ -408,7 +410,34 @@ const build_filter_list = (list_name, placeholderText, filtered_array) => {
             }
         });
     });
-    
+
+    filter_search_icon.addEventListener('click', () => {
+        if(list_name === 'ingredients') {
+            is_ingredients_list_active = false;
+            ingredients_button.style.display = 'flex';
+            const filter = document.querySelector('.ingredients_button_group .filter');
+            const temp_ingredients = document.querySelector('.temp_ingredients');
+            filter.remove();
+            temp_ingredients.remove();
+        }
+
+        if(list_name === 'appliances') {
+            is_appliances_list_active = false;
+            appliances_button.style.display = 'flex';
+            const filter = document.querySelector('.appliances_button_group .filter');
+            const temp_appliances = document.querySelector('.temp_appliances');
+            filter.remove();
+            temp_appliances.remove();
+        }
+
+        if(list_name === 'ustensils') {
+            is_ustensils_list_active = false;
+            ustensils_button.style.display = 'flex';
+            const filter = document.querySelector('.ustensils_button_group .filter');
+            filter.remove();
+        }
+    });
+
     return filter;
 };
 

@@ -1,6 +1,9 @@
 // Construire les boutons de filtre
 const filter_btns = document.querySelector('.filter_btns'); // sélectionner l'élément qui va contenir les boutons
 
+const tags_container = create('div', {class: 'tags_container'});
+filter_btns.appendChild(tags_container);
+
 const build_btns_group = () => {
     // Créer les boutons de tri
     const btns_group = create('div', {class: 'btns_group', role: 'group'});
@@ -147,6 +150,10 @@ let is_ingredients_list_active;
 let is_appliances_list_active;
 let is_ustensils_list_active;
 
+let selected_ingredients_tags = [];
+let selected_appliances_tags = [];
+let selected_ustensils_tags = [];
+
 build_recipes_grid(filtered_recipes);// On remplit la grille avec toutes les recettes
 
 /**
@@ -156,45 +163,79 @@ build_recipes_grid(filtered_recipes);// On remplit la grille avec toutes les rec
 const search_input = document.querySelector('.search_input'); // Sélectionner le champs de recherche
 
 search_input.addEventListener('input', (event) => {
-    if(search_input.value.length > 2) {
-        // Lancer la recherhe
-        launch_search(search_input.value.toLowerCase());
-    }
-    else {
-        refresh_filter_list(recipes);
-        recipes_grid.innerHTML = '';
-        build_recipes_grid(recipes);
-    }
+    // Lancer la recherhe
+    launch_search(search_input.value.toLowerCase(), selected_ingredients_tags, selected_appliances_tags, selected_ustensils_tags);
 });
 
 /**
  * 
- * @param {String} user_value : La valeur saisie par l'utilisateur
+ * @param {String} input_value : La valeur saisie par l'utilisateur dans le champs input
+ * @param {Array} ingredients_tags : tableau de tags des ingrédients
+ * @param {Array} appliances_tags : tableau de tags d'appareils
+ * @param {Array} ustensils_tags : tableau de tags des ustensils
+
  */
-const launch_search = (user_value) => {
-    // On reconstruit la grille de recettes contenant les recipes filtrées
-    filtered_recipes = recipes.filter((item) => {
-        // Le système recherche des recettes qui correspond à l’entrée utilisateur (dans le champs input)
-        const name_to_search = item.name.toLowerCase(); // le nom à rechercher
-        const ingredients = item.ingredients; // le tableau d'ingrédients à rechercher
-        const description_to_search = item.description.toLowerCase(); // la description à rechercher
-        
-        // Le système de recherche lié au filtre
-        const appliance_to_search = item.appliance.toLowerCase();
+const launch_search = (input_value, ingredients_tags, appliances_tags, ustensils_tags) => {
+    // Recherche selon la valeur saisie par l'utilisateur
+    if(input_value.length > 2) {
+        // On reconstruit la grille de recettes contenant les recipes filtrées
+        filtered_recipes = recipes.filter((item) => {
+            // Le système recherche des recettes qui correspond à l’entrée utilisateur (dans le champs input)
+            const name_to_search = item.name.toLowerCase(); // le nom à rechercher
+            const ingredients = item.ingredients; // le tableau d'ingrédients à rechercher
+            const description_to_search = item.description.toLowerCase(); // la description à rechercher
+            
+            if(name_to_search.includes(input_value)) {
+                return true;
+            }
+            else if (ingredients.some((el) => { return el.ingredient.toLowerCase().includes(input_value)})) {
+                return true;
+            }
+            // vérifier si description_to_search contient input_value
+            else if(description_to_search.includes(input_value)) {
+                return true;
+            }
+        });
+    }
+    else {
+        filtered_recipes = recipes;
+    }
 
-        // console.log(name_to_search.includes(user_value));
+    // Recherche selon les étiquettes (tags) d'ingrédients sélectionnés
+    if(ingredients_tags && ingredients_tags.length > 0) {
+        filtered_recipes = filtered_recipes.filter((item) => {
+            const ingredients = item.ingredients;
 
-        if(name_to_search.includes(user_value)) {
-            return true;
-        }
-        else if (ingredients.some((el) => { return el.ingredient.toLowerCase().includes(user_value)})) {
-            return true;
-        }
-        // vérifier si description_to_search contient user_value
-        else if(description_to_search.includes(user_value)) {
-            return true;
-        }
-    });
+            if(selected_ingredients_tags.every((s_ingr) => {return ingredients.some((el) => {return el.ingredient.toLowerCase().includes(s_ingr.toLowerCase())});})) {
+                return true;
+            }
+        });
+    }
+    //
+
+    // Recherche selon les étiquettes (tags) d'appareils sélectionnés
+    if(appliances_tags && appliances_tags.length > 0) {
+        filtered_recipes = filtered_recipes.filter((item) => {
+            const appliances = item.appliance;
+            
+            if(selected_appliances_tags.every((s_app) => {return appliances.toLowerCase().includes(s_app.toLowerCase())})) {
+                return true;
+            }
+        });
+    }
+    //
+
+    // Recherche selon les étiquettes (tags) d'ustensils sélectionnés
+    if(ustensils_tags && ustensils_tags.length > 0) {
+        filtered_recipes = filtered_recipes.filter((item) => {
+            const ustensils = item.ustensils;
+            
+            if(selected_ustensils_tags.every((s_ust) => {return ustensils.some((el) => {return el.toLowerCase().includes(s_ust.toLowerCase())});})) {
+                return true;
+            }
+        });
+    }
+    //
 
     refresh_filter_list(filtered_recipes);
 
@@ -220,7 +261,7 @@ ingredients_button.addEventListener('click', (event) => {
     is_ingredients_list_active = true;
 
     ingredients_button.style.display = 'none';
-    ingredients_button_group.appendChild(build_filter_list('#3282f7', 'Rechercher un ingrédient', filtered_ingredients(filtered_recipes)));
+    ingredients_button_group.appendChild(build_filter_list('ingredients', 'Rechercher un ingrédient', filtered_ingredients(filtered_recipes)));
 
     const filter_list = event.currentTarget.parentNode.querySelector('.filter_list');
     
@@ -233,7 +274,7 @@ ingredients_button.addEventListener('click', (event) => {
 appliances_button.addEventListener('click', (event) => {
     is_appliances_list_active = true;
     appliances_button.style.display = 'none';
-    appliances_button_group.appendChild(build_filter_list('#68d9a4', 'Rechercher une appareil', filtered_appliances(filtered_recipes)));
+    appliances_button_group.appendChild(build_filter_list('appliances', 'Rechercher une appareil', filtered_appliances(filtered_recipes)));
 
     const filter_list = event.currentTarget.parentNode.querySelector('.filter_list');
     
@@ -246,18 +287,35 @@ appliances_button.addEventListener('click', (event) => {
 ustensils_button.addEventListener('click', (event) => {
     is_ustensils_list_active = true;
     ustensils_button.style.display = 'none';
-    ustensils_button_group.appendChild(build_filter_list( '#ed6454', 'Rechercher un unstensil', filtered_ustensils(filtered_recipes)));
+    ustensils_button_group.appendChild(build_filter_list( 'ustensils', 'Rechercher un unstensil', filtered_ustensils(filtered_recipes)));
 });
 
 /**
  * 
- * @param {String} backgroundColor : la couleur de l'arrière plan de la liste
+ * @param {String} list_name : le nom de la liste, soit 'ingredients', 'appliances', 'ustensils'
  * @param {String} placeholderText : le texte visible dans l'input de la liste
  * @param {Array of strings} filtered_array : tableau de chaîne de caractères
  * @returns 
  */
-const build_filter_list = (backgroundColor, placeholderText, filtered_array) => {
+const build_filter_list = (list_name, placeholderText, filtered_array) => {
     const filter = create('div', {class: 'filter'});
+
+    let backgroundColor;
+
+    switch(list_name) {
+        case 'ingredients':
+            backgroundColor = '#3282f7';
+            break;
+
+        case 'appliances':
+            backgroundColor = '#68d9a4';
+            break;
+
+        case 'ustensils':
+            backgroundColor = '#ed6454';
+            break;
+    }
+
     filter.style.backgroundColor = backgroundColor;
 
     const filter_search_group = create('div', {class: 'filter_search_group'});
@@ -273,7 +331,7 @@ const build_filter_list = (backgroundColor, placeholderText, filtered_array) => 
     filter.appendChild(filter_search_group);
     filter.appendChild(filter_list);
 
-    /*const build_tag = (textContent) => {
+    const build_tag = (textContent) => {
         //Construire liste de tag
         const tag = create('div', {class: 'tag', 'data-id': textContent});
         tag.style.backgroundColor = backgroundColor;
@@ -291,7 +349,7 @@ const build_filter_list = (backgroundColor, placeholderText, filtered_array) => 
         });
     
         return tag;
-    };*/
+    };
 
     filtered_array.forEach((item) => {
         const filter_list_item = create('div', {class: 'filter_list_item'});
@@ -300,16 +358,24 @@ const build_filter_list = (backgroundColor, placeholderText, filtered_array) => 
         
         filter_list.appendChild(filter_list_item);
 
-        /*filter_list_item.addEventListener('click', (event) => {
-            // Si  tags_container contient un tag dont son data-id égal au text du bouton qu'on a cliqué dessus
+        filter_list_item.addEventListener('click', (event) => {
+            // Si tags_container contient un tag dont son data-id égal au text du bouton qu'on a cliqué dessus
             if(tags_container.querySelector('[data-id="'+item+'"]') === null) {
-                tags_container.appendChild(build_tag(item));
+                if(list_name === 'ingredients') {
+                    selected_ingredients_tags.push(item);
+                }
+                if(list_name === 'appliances') {
+                    selected_appliances_tags.push(item);
+                }
+                if(list_name === 'ustensils') {
+                    selected_ustensils_tags.push(item);
+                }
 
-                // On reconstruit la grille de recettes contenant la recette dont le tag est sélectionné
-                // const target_recipes = recipes.filter((item) => {
-                launch_search(item.toLowerCase()); // récupérer les recipes filtés avec l'input de recherche
+                tags_container.appendChild(build_tag(item));
+                // On relance la recherche
+                launch_search(search_input.value.toLowerCase(), selected_ingredients_tags, selected_appliances_tags, selected_ustensils_tags);
             }
-        });*/
+        });
     });
     
     return filter;
@@ -319,32 +385,16 @@ const refresh_filter_list = (filtered) => {
     if(is_ingredients_list_active === true) {
         const filter = document.querySelector('.ingredients_button_group .filter');
         filter.remove();
-        ingredients_button_group.appendChild(build_filter_list('#3282f7', 'Rechercher un ingrédient', filtered_ingredients(filtered)));
+        ingredients_button_group.appendChild(build_filter_list('ingredients', 'Rechercher un ingrédient', filtered_ingredients(filtered)));
     }
     if(is_appliances_list_active === true) {
         const filter = document.querySelector('.appliances_button_group .filter');
         filter.remove();
-        appliances_button_group.appendChild(build_filter_list('#68d9a4', 'Rechercher un Appareil', filtered_appliances(filtered)));
+        appliances_button_group.appendChild(build_filter_list('appliances', 'Rechercher un Appareil', filtered_appliances(filtered)));
     }
     if(is_ustensils_list_active === true) {
         const filter = document.querySelector('.ustensils_button_group .filter');
         filter.remove();
-        ustensils_button_group.appendChild(build_filter_list('#ed6454', 'Rechercher un ingrédient', filtered_ustensils(filtered)));
+        ustensils_button_group.appendChild(build_filter_list('ustensils', 'Rechercher un ingrédient', filtered_ustensils(filtered)));
     }
 };
-
-
-
-
-
-
-/*
-const tags_container = create('div', {class: 'tags_container'});
-filter_btns.prepend(tags_container);*/
-
-
-
-
-
-
-

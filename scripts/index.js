@@ -384,33 +384,38 @@ const build_filter_list = (list_name, placeholderText, filtered_array) => {
         return tag;
     };
 
-    filtered_array.forEach((item) => {
-        const filter_list_item = create('div', {class: 'filter_list_item'});
-        filter_list_item.textContent = item;
-        filter_list_item.style.cursor = 'pointer';
-        
-        filter_list.appendChild(filter_list_item);
-
-        filter_list_item.addEventListener('click', (event) => {
-            // Si tags_container contient un tag dont son data-id égal au text du bouton qu'on a cliqué dessus
-            if(tags_container.querySelector('[data-id="'+item+'"]') === null) {
-                if(list_name === 'ingredients') {
-                    selected_ingredients_tags.push(item);
+    const create_filter_list_items = (the_filtered_array) => {
+        the_filtered_array.forEach((item) => {
+            const filter_list_item = create('div', {class: 'filter_list_item'});
+            filter_list_item.textContent = item;
+            filter_list_item.style.cursor = 'pointer';
+            
+            filter_list.appendChild(filter_list_item);
+    
+            filter_list_item.addEventListener('click', (event) => {
+                // Si tags_container contient un tag dont son data-id égal au text du bouton qu'on a cliqué dessus
+                if(tags_container.querySelector('[data-id="'+item+'"]') === null) {
+                    if(list_name === 'ingredients') {
+                        selected_ingredients_tags.push(item);
+                    }
+                    if(list_name === 'appliances') {
+                        selected_appliances_tags.push(item);
+                    }
+                    if(list_name === 'ustensils') {
+                        selected_ustensils_tags.push(item);
+                    }
+    
+                    tags_container.appendChild(build_tag(item));
+                    // On relance la recherche
+                    launch_search(search_input.value.toLowerCase(), selected_ingredients_tags, selected_appliances_tags, selected_ustensils_tags);
                 }
-                if(list_name === 'appliances') {
-                    selected_appliances_tags.push(item);
-                }
-                if(list_name === 'ustensils') {
-                    selected_ustensils_tags.push(item);
-                }
-
-                tags_container.appendChild(build_tag(item));
-                // On relance la recherche
-                launch_search(search_input.value.toLowerCase(), selected_ingredients_tags, selected_appliances_tags, selected_ustensils_tags);
-            }
+            });
         });
-    });
+    };
 
+    create_filter_list_items(filtered_array);
+
+    // Fermeture de la liste des tags
     filter_search_icon.addEventListener('click', () => {
         if(list_name === 'ingredients') {
             is_ingredients_list_active = false;
@@ -438,9 +443,28 @@ const build_filter_list = (list_name, placeholderText, filtered_array) => {
         }
     });
 
+    // Recherche de tags selon la valeur saisie dans le champs de la liste
+    filter_search_input.addEventListener('input', (event) => {
+        let new_filtered_array = [];
+
+        new_filtered_array = filtered_array.filter((item) => {
+            if(item.includes(filter_search_input.value)) {
+                return true;
+            }
+        });
+
+        filter_list.innerHTML = '';
+
+        create_filter_list_items(new_filtered_array);
+    });
+
     return filter;
 };
 
+/**
+ * 
+ * @param {Array} filtered : tableau de recettes filtrées
+ */
 const refresh_filter_list = (filtered) => {
     if(is_ingredients_list_active === true) {
         const filter = document.querySelector('.ingredients_button_group .filter');

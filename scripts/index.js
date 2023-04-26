@@ -360,23 +360,29 @@ const build_filter_list = (list_name, placeholderText, filtered_array) => {
             tag.remove();
 
             // Mise à jour des tableaux de tags
-            selected_ingredients_tags = selected_ingredients_tags.filter((el) => {
-                if(list_name === 'ingredients' && el.toLowerCase() !== textContent.toLowerCase()) {
-                    return true;
-                }
-            });
+            if(list_name === 'ingredients' ) {
+                selected_ingredients_tags = selected_ingredients_tags.filter((el) => {
+                    if(el.toLowerCase() !== textContent.toLowerCase()) {
+                        return true;
+                    }
+                });
+            }
 
-            selected_appliances_tags = selected_appliances_tags.filter((el) => {
-                if(list_name === 'appliances' && el.toLowerCase() !== textContent.toLowerCase()) {
-                    return true;
-                }
-            });
+            if(list_name === 'appliances' ) {
+                selected_appliances_tags = selected_appliances_tags.filter((el) => {
+                    if(el.toLowerCase() !== textContent.toLowerCase()) {
+                        return true;
+                    }
+                });
+            }
 
-            selected_ustensils_tags = selected_ustensils_tags.filter((el) => {
-                if(list_name === 'ustensils' && el.toLowerCase() !== textContent.toLowerCase()) {
-                    return true;
-                }
-            });
+            if(list_name === 'ustensils'){
+                selected_ustensils_tags = selected_ustensils_tags.filter((el) => {
+                    if(el.toLowerCase() !== textContent.toLowerCase()) {
+                        return true;
+                    }
+                });
+            }
 
             launch_search(search_input.value.toLowerCase(), selected_ingredients_tags, selected_appliances_tags, selected_ustensils_tags);   
         });

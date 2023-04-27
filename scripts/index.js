@@ -81,7 +81,7 @@ const build_recipes_grid = (items) => {
             const el_quantity = el.quantity ? el.quantity : '';
             const el_unit = el.unit ? el.unit : '';
 
-            ingredient.textContent = el_ingredient + ': ' + el_quantity  + el_unit;
+            ingredient.innerHTML = '<span>'+el_ingredient + ': </span>' + el_quantity  + el_unit;
 
             recipe_ingredients.appendChild(ingredient);
         });
@@ -224,7 +224,7 @@ const launch_search = (input_value, ingredients_tags, appliances_tags, ustensils
     // Recherche selon la valeur saisie par l'utilisateur
     if(input_value.length > 2) {
         // On reconstruit la grille de recettes contenant les recipes filtrées
-        filtered_recipes = filtered_recipes.filter((item) => {
+        filtered_recipes = recipes.filter((item) => {
             // Le système recherche des recettes qui correspond à l’entrée utilisateur (dans le champs input)
             const name_to_search = item.name.toLowerCase(); // le nom à rechercher
             const ingredients = item.ingredients; // le tableau d'ingrédients à rechercher

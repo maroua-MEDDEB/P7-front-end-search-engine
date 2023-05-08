@@ -56,7 +56,7 @@ const recipes_grid = document.querySelector('.recipes_grid');
 
 /**
  * 
- * @param {*Array} items : tableau de recettes
+ * @param {Array} items : tableau de recettes
  */
 const build_recipes_grid = (items) => {
     items.forEach((element, index) => {

@@ -1,46 +1,49 @@
+/**
+ * Créer un élément html avec ses attributs
+ * @param  elem : (String) le nom de la balise
+ * @param attributes : (Objet) qui contient les attributs de l'élément
+ * @returns : (String) l'élément html
+ */
+const create_element = (elem, attributes) => {
+    const element = document.createElement(elem);
+    for(key in attributes) {
+        element.setAttribute(key, attributes[key]);
+    }
+    return element;
+};
+
+/**
+ * Créer un bouton pour le système de tri
+ * @param {String} button_group_class 
+ * @param {String} button_class 
+ * @param {String} text_content 
+ * @returns String : élément html
+ */
+const create_button = (button_group_class, button_class, text_content) => {
+    // créer un groupe pour le bouton
+    const button_group = create_element('div', {class: 'filter_button_group '+button_group_class});
+    // Créer le bouton de tri
+    const button = create_element('button', {class: 'filter_button '+button_class, type: 'button'});
+    button.textContent = text_content;
+    const button_icon = create_element('i', {class: 'fa-solid fa-chevron-down'});
+    button.appendChild(button_icon);
+    button_group.appendChild(button);
+    return button_group;
+};
+
 // Construire les boutons de filtre
 const filter_btns = document.querySelector('.filter_btns'); // sélectionner l'élément qui va contenir les boutons
 
-const tags_container = create('div', {class: 'tags_container'});
+const tags_container = create_element('div', {class: 'tags_container'});
 filter_btns.appendChild(tags_container);
 
 const build_btns_group = () => {
     // Créer les boutons de tri
-    const btns_group = create('div', {class: 'btns_group', role: 'group'});
+    const btns_group = create_element('div', {class: 'btns_group', role: 'group'});
 
-    // créer un groupe pour le  bouton d'ingrédients
-    const ingredients_button_group = create('div', {class: 'filter_button_group ingredients_button_group'});
-    // Créer le bouton de tri d'ingredients
-    const ingredients_button =create('button', {class: 'filter_button ingredients_button', type: 'button'});
-    ingredients_button.textContent = 'Ingredients';
-    const ingredients_button_icon = create('i', {class: 'fa-solid fa-chevron-down'});
-    ingredients_button.appendChild(ingredients_button_icon);
-    ingredients_button_group.appendChild(ingredients_button);
-
-    // Créer un groupe pour le  bouton d'appareils
-    const appliances_button_group = create('div', {class: 'filter_button_group appliances_button_group'});
-    // Créer le bouton de tri d'Appareils
-    const appliances_button = create('button', {class: 'filter_button appliances_button', type: 'button'});
-    appliances_button.textContent = 'Appareils';
-    const appliances_button_icon = create('i', {class: 'fa-solid fa-chevron-down'});
-    appliances_button.appendChild(appliances_button_icon);
-    appliances_button_group.appendChild(appliances_button);
-
-    // créer un groupe pour le  bouton d'ustensils
-    const ustensils_button_group = create('div', {class: 'filter_button_group ustensils_button_group'});
-    // Créer le bouton de tri d'Ustensils
-    const ustensils_button = create('button', {class:'filter_button ustensils_button', type: 'button'});
-    ustensils_button.textContent = 'Ustensils';
-    const ustensils_button_icon = create('i', {class: 'fa-solid fa-chevron-down'});
-    ustensils_button.appendChild(ustensils_button_icon);
-    ustensils_button_group.appendChild(ustensils_button);
-
-    
-    btns_group.appendChild(ingredients_button_group);
-    
-    btns_group.appendChild(appliances_button_group);
-    
-    btns_group.appendChild(ustensils_button_group);
+    btns_group.appendChild(create_button('ingredients_button_group', 'ingredients_button', 'Ingredients'));
+    btns_group.appendChild(create_button('appliances_button_group', 'appliances_button', 'Appareils'));   
+    btns_group.appendChild(create_button('ustensils_button_group', 'ustensils_button', 'Ustensils'));
 
     return btns_group;
 };
@@ -59,24 +62,24 @@ const build_recipes_grid = (items) => {
     items.forEach((element, index) => {
         /*const recipe = document.createElement('div');
         recipe.classList.add('recipe');*/
-        const recipe = create('div', {class: 'recipe'});
+        const recipe = create_element('div', {class: 'recipe'});
 
-        const recipe_image = create('div', {class : 'recipe_image'});
+        const recipe_image = create_element('div', {class : 'recipe_image'});
 
-        const recipe_info = create('div', {class: 'recipe_info'});
+        const recipe_info = create_element('div', {class: 'recipe_info'});
 
-        const recipe_name = create('span', {class: 'recipe_name'});
+        const recipe_name = create_element('span', {class: 'recipe_name'});
         recipe_name.textContent = element.name;
 
-        const recipe_time_icon = create('i', {class: 'fa-regular fa-clock recipe_time_icon'});
+        const recipe_time_icon = create_element('i', {class: 'fa-regular fa-clock recipe_time_icon'});
               
-        const recipe_time = create('span', {class : 'recipe_time'});
+        const recipe_time = create_element('span', {class : 'recipe_time'});
         recipe_time.textContent = element.time + ' min';
         
-        const recipe_ingredients = create('div', {class: 'recipe_ingredients'});
+        const recipe_ingredients = create_element('div', {class: 'recipe_ingredients'});
         
         element.ingredients.forEach((el) => {
-            const ingredient = create('div');
+            const ingredient = create_element('div');
             const el_ingredient = el.ingredient ? el.ingredient : '';
             const el_quantity = el.quantity ? el.quantity : '';
             const el_unit = el.unit ? el.unit : '';
@@ -86,7 +89,7 @@ const build_recipes_grid = (items) => {
             recipe_ingredients.appendChild(ingredient);
         });
 
-        const recipe_description = create('div', {class: 'recipe_description'});
+        const recipe_description = create_element('div', {class: 'recipe_description'});
         recipe_description.textContent = element.description;
 
         recipe.appendChild(recipe_image);
@@ -107,15 +110,26 @@ const build_recipes_grid = (items) => {
 
 let filtered_recipes = recipes; // Le tableau des recettes filtrées (initialement toutes les recettes)
 
+/**
+ * Ajouter un élément unique au tableau
+ * @param {Array} list 
+ * @param {String} itemList 
+ */
+const push_once = (list, itemList) => {
+    // Si le tableau list ne contient pas déjà itemList, on ajoute ce dernier
+    if(list.indexOf(itemList.toLowerCase()) === -1) {
+        list.push(itemList.toLowerCase());
+    } 
+};
+
 const filtered_ingredients = (filtered) => {
     let ingredientsList = []; //Tableau de chaîne de caractères
     
     filtered.forEach((recipe) => {
         const ingredients = recipe.ingredients;
+
         ingredients.forEach((ingr) => {
-            if(ingredientsList.indexOf(ingr.ingredient.toLowerCase()) === -1) {
-                ingredientsList.push(ingr.ingredient.toLowerCase());
-            }
+            push_once(ingredientsList, ingr.ingredient);
         });    
     });
     return ingredientsList;
@@ -124,10 +138,7 @@ const filtered_ingredients = (filtered) => {
 const filtered_appliances = (filtered) => {
     let appliancesList = [];
     filtered.forEach((el) => {
-        // Si le tableau appliancesList ne contient pas  déjà "appliance" donc on ajoute ce dernier
-        if(appliancesList.indexOf(el.appliance.toLowerCase()) === -1 ) {
-            appliancesList.push(el.appliance.toLowerCase());
-        }
+        push_once(appliancesList, el.appliance);
     });
     return appliancesList;
 };
@@ -138,10 +149,8 @@ const filtered_ustensils = (filtered) => {
         const ustensils = recipe.ustensils;
     
         ustensils.forEach((ust) => {
-            if(ustensilsList.indexOf(ust.toLowerCase()) === -1) {
-                ustensilsList.push(ust.toLowerCase());
-            }
-        });    
+            push_once(ustensilsList, ust);
+        });
     });
     return ustensilsList;
 };
@@ -268,37 +277,46 @@ const appliances_button = document.querySelector('.appliances_button');
 const ustensils_button_group = document.querySelector('.ustensils_button_group');
 const ustensils_button = document.querySelector('.ustensils_button');
 
-ingredients_button.addEventListener('click', (event) => {
-    is_ingredients_list_active = true;
+/**
+ * Afficher les listes des tags
+ * @param {listener} event
+ * @param {String} list_name: le nom de la liste 
+ * @param {String} the_list : la liste en tant qu'élément html
+ */
+const show_filter_list = (event, list_name, the_list) => {
+    switch(list_name) {
+        case 'ingredients':
+            is_ingredients_list_active = true;
+            break;
+        case 'appliances':
+            is_appliances_list_active = true;
+            break;
+        case 'ustensils':
+            is_ustensils_list_active = true;
+            break;
+    }
 
-    ingredients_button.style.display = 'none';
-    ingredients_button_group.appendChild(build_filter_list('ingredients', 'Rechercher un ingrédient', filtered_ingredients(filtered_recipes)));
+    event.currentTarget.style.display = 'none';
+    event.currentTarget.parentNode.appendChild(the_list);
 
     const filter_list = event.currentTarget.parentNode.querySelector('.filter_list');
     
-    const temp_element = create('div', {class: 'temp_ingredients'});
+    const temp_element = create_element('div', {class: 'temp_'+list_name});
     temp_element.style.width = filter_list.offsetWidth + 40 +'px';
 
-    ingredients_button_group.appendChild(temp_element);
+    event.currentTarget.parentNode.appendChild(temp_element);
+};
+
+ingredients_button.addEventListener('click', (event) => {
+    show_filter_list(event, 'ingredients', build_filter_list('ingredients', 'Rechercher un ingrédient', filtered_ingredients(filtered_recipes)));
 });
 
 appliances_button.addEventListener('click', (event) => {
-    is_appliances_list_active = true;
-    appliances_button.style.display = 'none';
-    appliances_button_group.appendChild(build_filter_list('appliances', 'Rechercher une appareil', filtered_appliances(filtered_recipes)));
-
-    const filter_list = event.currentTarget.parentNode.querySelector('.filter_list');
-    
-    const temp_element = create('div', {class: 'temp_appliances'});
-    temp_element.style.width = filter_list.offsetWidth + 40 +'px';
-
-    appliances_button_group.appendChild(temp_element);
+    show_filter_list(event, 'appliances', build_filter_list('appliances', 'Rechercher une appareil', filtered_appliances(filtered_recipes)));
 });
 
 ustensils_button.addEventListener('click', (event) => {
-    is_ustensils_list_active = true;
-    ustensils_button.style.display = 'none';
-    ustensils_button_group.appendChild(build_filter_list( 'ustensils', 'Rechercher un unstensil', filtered_ustensils(filtered_recipes)));
+    show_filter_list(event, 'ustensils', build_filter_list( 'ustensils', 'Rechercher un unstensil', filtered_ustensils(filtered_recipes)));
 });
 
 /**
@@ -309,7 +327,7 @@ ustensils_button.addEventListener('click', (event) => {
  * @returns 
  */
 const build_filter_list = (list_name, placeholderText, filtered_array) => {
-    const filter = create('div', {class: 'filter'});
+    const filter = create_element('div', {class: 'filter'});
 
     let backgroundColor;
 
@@ -329,14 +347,14 @@ const build_filter_list = (list_name, placeholderText, filtered_array) => {
 
     filter.style.backgroundColor = backgroundColor;
 
-    const filter_search_group = create('div', {class: 'filter_search_group'});
+    const filter_search_group = create_element('div', {class: 'filter_search_group'});
 
-    const filter_search_input = create('input', {type: 'text', placeholder: placeholderText});
+    const filter_search_input = create_element('input', {type: 'text', placeholder: placeholderText});
 
-    const filter_search_icon = create('i', {class: 'fa-solid fa-chevron-up'});
+    const filter_search_icon = create_element('i', {class: 'fa-solid fa-chevron-up'});
     filter_search_icon.style.cursor = 'pointer';
 
-    const filter_list = create('div', {class: 'filter_list'});
+    const filter_list = create_element('div', {class: 'filter_list'});
 
     filter_search_group.appendChild(filter_search_input);
     filter_search_group.appendChild(filter_search_icon);
@@ -345,45 +363,41 @@ const build_filter_list = (list_name, placeholderText, filtered_array) => {
 
     const build_tag = (textContent) => {
         //Construire liste de tag
-        const tag = create('div', {class: 'tag', 'data-id': textContent});
+        const tag = create_element('div', {class: 'tag', 'data-id': textContent});
         tag.style.backgroundColor = backgroundColor;
     
-        const tag_text = create('span', {class: 'tag_text'});
+        const tag_text = create_element('span', {class: 'tag_text'});
         tag_text.textContent = textContent;
     
-        const tag_icon = create('i', {class: 'fa-regular fa-circle-xmark tag_icon'});
+        const tag_icon = create_element('i', {class: 'fa-regular fa-circle-xmark tag_icon'});
               
         tag.appendChild(tag_text);
         tag.appendChild(tag_icon);
 
+        /**
+         * Mise à jour des tableaux de tags
+         * @param {String} listName : le nom de la liste
+         * @param {Array} the_selected_array : le tableau de tags sélectionnés
+         * @returns 
+         */
+        let update_tags_array = (listName, the_selected_array) => {
+            if(list_name === listName) {               
+                the_selected_array = the_selected_array.filter((el) => {
+                    if(el.toLowerCase() !== textContent.toLowerCase()) {
+                        return true;
+                    }
+                });
+            }
+            return the_selected_array;
+        };
+
         tag_icon.addEventListener('click', () => {
             tag.remove();
-
-            // Mise à jour des tableaux de tags
-            if(list_name === 'ingredients' ) {
-                selected_ingredients_tags = selected_ingredients_tags.filter((el) => {
-                    if(el.toLowerCase() !== textContent.toLowerCase()) {
-                        return true;
-                    }
-                });
-            }
-
-            if(list_name === 'appliances' ) {
-                selected_appliances_tags = selected_appliances_tags.filter((el) => {
-                    if(el.toLowerCase() !== textContent.toLowerCase()) {
-                        return true;
-                    }
-                });
-            }
-
-            if(list_name === 'ustensils'){
-                selected_ustensils_tags = selected_ustensils_tags.filter((el) => {
-                    if(el.toLowerCase() !== textContent.toLowerCase()) {
-                        return true;
-                    }
-                });
-            }
-
+            
+            selected_ingredients_tags = update_tags_array('ingredients', selected_ingredients_tags);
+            selected_appliances_tags = update_tags_array('appliances', selected_appliances_tags)
+            selected_ustensils_tags = update_tags_array('ustensils', selected_ustensils_tags);
+ 
             launch_search(search_input.value.toLowerCase(), selected_ingredients_tags, selected_appliances_tags, selected_ustensils_tags);   
         });
     
@@ -392,7 +406,7 @@ const build_filter_list = (list_name, placeholderText, filtered_array) => {
 
     const create_filter_list_items = (the_filtered_array) => {
         the_filtered_array.forEach((item) => {
-            const filter_list_item = create('div', {class: 'filter_list_item'});
+            const filter_list_item = create_element('div', {class: 'filter_list_item'});
             filter_list_item.textContent = item;
             filter_list_item.style.cursor = 'pointer';
             
@@ -422,31 +436,31 @@ const build_filter_list = (list_name, placeholderText, filtered_array) => {
     create_filter_list_items(filtered_array);
 
     // Fermeture de la liste des tags
+    const remove_filter_list = (listName, the_button) => {
+        switch(listName) {
+            case 'ingredients':
+                is_ingredients_list_active = false;
+                break;
+            case 'appliances':
+                is_appliances_list_active = false;
+                break;
+            case 'ustensils':
+                is_ustensils_list_active = false;
+                break;
+        }
+        if(list_name === listName) {
+            the_button.style.display = 'flex';
+            const filter = the_button.parentNode.querySelector('.filter');
+            const temp_holder = document.querySelector('.temp_'+listName);
+            filter.remove();
+            temp_holder.remove();
+        }    
+    };
+
     filter_search_icon.addEventListener('click', () => {
-        if(list_name === 'ingredients') {
-            is_ingredients_list_active = false;
-            ingredients_button.style.display = 'flex';
-            const filter = document.querySelector('.ingredients_button_group .filter');
-            const temp_ingredients = document.querySelector('.temp_ingredients');
-            filter.remove();
-            temp_ingredients.remove();
-        }
-
-        if(list_name === 'appliances') {
-            is_appliances_list_active = false;
-            appliances_button.style.display = 'flex';
-            const filter = document.querySelector('.appliances_button_group .filter');
-            const temp_appliances = document.querySelector('.temp_appliances');
-            filter.remove();
-            temp_appliances.remove();
-        }
-
-        if(list_name === 'ustensils') {
-            is_ustensils_list_active = false;
-            ustensils_button.style.display = 'flex';
-            const filter = document.querySelector('.ustensils_button_group .filter');
-            filter.remove();
-        }
+        remove_filter_list('ingredients', ingredients_button);
+        remove_filter_list('appliances', appliances_button);
+        remove_filter_list('ustensils', ustensils_button);
     });
 
     // Recherche de tags selon la valeur saisie dans le champs de la liste

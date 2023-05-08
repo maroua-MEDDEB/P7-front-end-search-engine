@@ -226,7 +226,7 @@ search_input.addEventListener('input', (event) => {
  * @param {String} input_value : La valeur saisie par l'utilisateur dans le champs input
  * @param {Array} ingredients_tags : tableau de tags des ingrédients
  * @param {Array} appliances_tags : tableau de tags d'appareils
- * @param {Array} ustensils_tags : tableau de tags des ustensils
+ * @param {Array} ustensils_tags : tableau de tags d'ustensils
 
  */
 const launch_search = (input_value, ingredients_tags, appliances_tags, ustensils_tags) => {

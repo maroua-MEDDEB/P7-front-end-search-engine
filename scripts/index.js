@@ -56,7 +56,7 @@ const recipes_grid = document.querySelector('.recipes_grid');
 
 /**
  * 
- * @param {Array} items : tableau de recettes
+ * @param {*Array} items : tableau de recettes
  */
 const build_recipes_grid = (items) => {
     items.forEach((element, index) => {
@@ -111,7 +111,7 @@ const build_recipes_grid = (items) => {
 let filtered_recipes = recipes; // Le tableau des recettes filtrées (initialement toutes les recettes)
 
 /**
- * Ajouter un élément unique au tableau
+ * Ajouter un élément unique au tableau. Aucune dupplication
  * @param {Array} list 
  * @param {String} itemList 
  */
@@ -233,23 +233,30 @@ const launch_search = (input_value, ingredients_tags, appliances_tags, ustensils
     // Recherche selon la valeur saisie par l'utilisateur
     if(input_value.length > 2) {
         // On reconstruit la grille de recettes contenant les recipes filtrées
-        filtered_recipes = recipes.filter((item) => {
+        let new_filtered_recipes = [];
+
+        for(let i = 0; i < recipes.length; i++) {
             // Le système recherche des recettes qui correspond à l’entrée utilisateur (dans le champs input)
-            const name_to_search = item.name.toLowerCase(); // le nom à rechercher
-            const ingredients = item.ingredients; // le tableau d'ingrédients à rechercher
-            const description_to_search = item.description.toLowerCase(); // la description à rechercher
+            const name_to_search = recipes[i].name.toLowerCase(); // le nom à rechercher
+            const ingredients = recipes[i].ingredients; // le tableau d'ingrédients à rechercher
+            const description_to_search = recipes[i].description.toLowerCase(); // la description à rechercher
             
             if(name_to_search.includes(input_value)) {
-                return true;
-            }
-            else if (ingredients.some((el) => { return el.ingredient.toLowerCase().includes(input_value)})) {
-                return true;
+                new_filtered_recipes.push(recipes[i]);
             }
             // vérifier si description_to_search contient input_value
             else if(description_to_search.includes(input_value)) {
-                return true;
+                new_filtered_recipes.push(recipes[i]);
             }
-        });
+            else {
+                for(let j = 0; j < ingredients.length; j++) {
+                    if(ingredients[j].ingredient.toLowerCase().includes(input_value)) {
+                        new_filtered_recipes.push(recipes[i]);
+                    }
+                }
+            }
+        }
+        filtered_recipes = new_filtered_recipes;
     }
     else {
         filtered_recipes = recipes;
